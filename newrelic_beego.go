@@ -68,8 +68,8 @@ func NameTransaction(ctx *context.Context) {
 		path = reNumberIDInPath.ReplaceAllString(ctx.Request.URL.Path, ":id")
 	}
 
-	displayExplicitEnv := beego.AppConfig.DefaultString("newrelic_display_explicit_env", "")
-	if displayExplicitEnv != "" {
+	displayExplicitEnv := beego.AppConfig.DefaultString("newrelic_display_explicit_env", "FALSE")
+	if strings.ToUpper(displayExplicitEnv) == "TRUE" {
 		env := strings.ToUpper(ctx.Input.Param(":env"))
 		path = strings.Replace(path, ":env", env, -1)
 	}
