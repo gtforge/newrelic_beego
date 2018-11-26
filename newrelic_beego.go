@@ -9,7 +9,6 @@ import (
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"
 	"github.com/newrelic/go-agent"
-	"github.com/remind101/newrelic"
 )
 
 var (
