@@ -1,9 +1,9 @@
-newrelic_beego
-=============
+NewRelic BeeGo
+==============
 
-newrelic_beego is "plug and play" package for monitoring(APM) beego framework with newrelic offical agent
+NewRelic BeeGo is "plug and play" package for monitoring (APM) BeeGo framework with NewRelic official agent<br />
 
-Support http endpoints
+Supports http endpoints
  
 Can Get newrelic_beego.NewrelicAgent for custom monitoring(database,external call, func etc..)
 Can Get newrelic transaction per request from beego context
@@ -22,11 +22,11 @@ defer txn.EndDatastore(txn.StartSegment(), datastore.Segment{
 
 # Installation
 ```
-go get github.com/sergeylanzman/newrelic_beego"
+dep ensure -v
 ```
 
-Add  _ "github.com/sergeylanzman/newrelic_beego" to import in main.go file
+Add  `_ "github.com/gtforge/newrelic_beego"` as an import in `main.go` file
 
-# Settings
+# Available settings
     - appname = name of app in newrelic
     - newrelic_license = newrelic license
