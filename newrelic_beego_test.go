@@ -28,3 +28,42 @@ func TestGeneratePath(t *testing.T) {
 		}
 	}
 }
+func TestParseSkipPathsEmpty(t *testing.T) {
+	paths := parseSkipPaths("        ")
+
+	if len(paths) != 0 {
+		t.Errorf("Skip paths should be empty")
+	}
+}
+
+func TestParseSkipPathsSingle(t *testing.T) {
+	paths := parseSkipPaths(`,     ,   /handle 
+							,,,  ,
+							,    ,`)
+
+	if len(paths) != 1 {
+		t.Errorf("Skip paths should contain 1 value")
+	}
+
+	if paths["/handle"] != true {
+		t.Errorf("Skip paths should contain /handle=true")
+	}
+}
+
+func TestParseSkipPathsMulti(t *testing.T) {
+	expected := []string{"/alive", "/handle"}
+	paths := parseSkipPaths(`
+						,,, ,, 
+					/AlIve,
+						  /handlE, `)
+
+	if len(paths) != 2 {
+		t.Errorf("Skip paths should contain %d values", len(expected))
+	}
+
+	for _, path := range expected {
+		if paths[path] != true {
+			t.Errorf("Skip paths should contain %s", path)
+		}
+	}
+}

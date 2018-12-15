@@ -17,6 +17,9 @@ var (
 	NewrelicAgent    newrelic.Application
 )
 
+// Paths NewRelic needs to skip from reporting
+var skipPaths map[string]bool
+
 func init() {
 	appName := os.Getenv("NEW_RELIC_APP_NAME")
 	license := os.Getenv("NEW_RELIC_LICENSE_KEY")
@@ -34,6 +37,10 @@ func init() {
 			return
 		}
 	}
+
+
+	skipPaths = parseSkipPaths(beego.AppConfig.String("newrelic_skip_paths"))
+
 	config := newrelic.NewConfig(appName, license)
 	config.CrossApplicationTracer.Enabled = false
 	app, err := newrelic.NewApplication(config)
@@ -45,7 +52,21 @@ func init() {
 	beego.InsertFilter("*", beego.BeforeRouter, StartTransaction, false)
 	beego.InsertFilter("*", beego.AfterExec, NameTransaction, false)
 	beego.InsertFilter("*", beego.FinishRouter, EndTransaction, false)
-	beego.Info("NewRelic agent start")
+	beego.Info("NewRelic agent started")
+}
+
+// parseSkipPaths gets string of comma separated paths
+// It returns a set of normalized paths
+func parseSkipPaths(pathsConfig string) (paths map[string]bool) {
+	splitPaths := strings.Split(pathsConfig, ",")
+
+	for _, path := range splitPaths {
+		formatted := strings.TrimSpace(path)
+		formatted = strings.ToLower(formatted)
+		paths[formatted] = true
+	}
+
+	return paths
 }
 
 func StartTransaction(ctx *context.Context) {
