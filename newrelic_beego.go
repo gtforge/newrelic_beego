@@ -8,7 +8,7 @@ import (
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/context"
-	newrelic "github.com/newrelic/go-agent"
+	"github.com/newrelic/go-agent"
 )
 
 var (
