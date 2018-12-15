@@ -1,12 +1,15 @@
+[![Build Status](https://travis-ci.com/gtforge/newrelic_beego.svg?branch=master)](https://travis-ci.com/gtforge/newrelic_beego)
+
 NewRelic BeeGo
 ==============
 
 NewRelic BeeGo is "plug and play" package for monitoring (APM) BeeGo framework with NewRelic official agent<br />
 
-Supports http endpoints
+Supports HTTP endpoints
  
-Can Get newrelic_beego.NewrelicAgent for custom monitoring(database,external call, func etc..)
-Can Get newrelic transaction per request from beego context
+You can use exposed newrelic_beego.NewrelicAgent for custom monitoring, such as database, external calls, functions, etc.
+
+Also, you can get NewRelic transaction per request from BeeGo context:
 ```
 txn := ctx.Input.GetData("newrelic_transaction").(newrelic.Transaction)
 defer txn.EndDatastore(txn.StartSegment(), datastore.Segment{
@@ -29,4 +32,7 @@ Add  `_ "github.com/gtforge/newrelic_beego"` as an import in `main.go` file
 
 # Available settings
     - appname = name of app in newrelic
+    - newrelic_appname = same as `appname`
     - newrelic_license = newrelic license
+    - newrelic_display_explicit_env = TRUE will display RU/IL/UK in the URL. FALSE will display just :env
+    - newrelic_skip_paths = comma separated paths that shouldn't be logged by NewRelic
