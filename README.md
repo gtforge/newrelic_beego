@@ -35,4 +35,4 @@ Add  `_ "github.com/gtforge/newrelic_beego"` as an import in `main.go` file
     - newrelic_appname = same as `appname`
     - newrelic_license = newrelic license
     - newrelic_display_explicit_env = TRUE will display RU/IL/UK in the URL. FALSE will display just :env
-    - newrelic_skip_paths = comma separated paths that shouldn't be logged by NewRelic
+    - newrelic_skip_paths = comma separated paths that shouldn't be logged by NewRelic. Can be exact match (`/alive`) or wildcard prefix (`/alive*`)

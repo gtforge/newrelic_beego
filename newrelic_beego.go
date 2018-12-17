@@ -78,13 +78,33 @@ func parseSkipPaths(pathsConfig string) map[string]bool {
 const newRelicTransaction = "newrelic_transaction"
 
 func StartTransaction(ctx *context.Context) {
-	if skipPaths[ctx.Request.URL.Path] {
+	if shouldSkip(skipPaths, ctx.Request.URL.Path) {
 		return
 	}
 
 	tx := NewrelicAgent.StartTransaction(ctx.Request.URL.Path, ctx.ResponseWriter.ResponseWriter, ctx.Request)
 	ctx.ResponseWriter.ResponseWriter = tx
 	ctx.Input.SetData(newRelicTransaction, tx)
+}
+
+// shouldSkip decides if given path matches against declared skip paths
+// Support both exact matches and wildcard matches
+func shouldSkip(skipPaths map[string]bool, path string) bool {
+	_, exactMatch := skipPaths[path]
+
+	if exactMatch {
+		return true
+	}
+
+	for skipPath := range skipPaths {
+		if strings.HasSuffix(skipPath, "*") {
+			if strings.HasPrefix(path, skipPath[0:len(skipPath)-1]) {
+				return true
+			}
+		}
+	}
+
+	return false
 }
 
 func NameTransaction(ctx *context.Context) {
