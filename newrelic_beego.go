@@ -97,10 +97,8 @@ func shouldSkip(skipPaths map[string]bool, path string) bool {
 	}
 
 	for skipPath := range skipPaths {
-		if strings.HasSuffix(skipPath, "*") {
-			if strings.HasPrefix(path, skipPath[0:len(skipPath)-1]) {
-				return true
-			}
+		if strings.Contains(path, skipPath) {
+			return true
 		}
 	}
 

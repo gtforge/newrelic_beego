@@ -69,7 +69,7 @@ func TestParseSkipPathsMulti(t *testing.T) {
 }
 
 func TestShouldSkip_Wildcard(t *testing.T) {
-	if !shouldSkip(map[string]bool{"/handle/*": true}, "/handle/123") {
+	if !shouldSkip(map[string]bool{"/handle/": true}, "/handle/123") {
 		t.Errorf("Wilcard is used, but suffix is not matched")
 	}
 }
@@ -80,20 +80,14 @@ func TestShouldSkip_ExactMatch(t *testing.T) {
 	}
 }
 
-func TestShouldSkip_WildcardNoMatch(t *testing.T) {
-	if shouldSkip(map[string]bool{"/handle/*": true}, "/alive") {
+func TestShouldSkip_NoMatch(t *testing.T) {
+	if shouldSkip(map[string]bool{"/handle/": true}, "/alive") {
 		t.Errorf("Path is not present, but wildcard was matched")
 	}
 }
 
-func TestShouldSkip_NoExactMatch(t *testing.T) {
-	if shouldSkip(map[string]bool{"/handle/": true}, "/handle/123") {
-		t.Errorf("Wildcard is not used, but suffixed is not matched")
-	}
-}
-
-func TestShouldSkip_WildcardAndExactMatchSamePath(t *testing.T) {
-	if !shouldSkip(map[string]bool{"/handle/": true, "/handle/*": true},
+func TestShouldSkip_WildcardMultiplePaths(t *testing.T) {
+	if !shouldSkip(map[string]bool{"/handle/": true, "/alive": true},
 		"/handle/123") {
 		t.Errorf("Wildcard is used, but suffixed is not matched")
 	}
