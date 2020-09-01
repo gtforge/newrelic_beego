@@ -1,12 +1,3 @@
-# This project is in its End Of Life
-## it's STRICTLY NOT RECOMMENDED to introduce this project as dependency to any other project.
-
-### This project can get only security and compatibility updates to support services and libraries that already use them as dependencies.
-
-### For generaly avaialbe alternatives please follow this link - https://confluence.gtforge.com/pages/viewpage.action?pageId=54133377
-
-[![Build Status](https://travis-ci.com/gtforge/newrelic_beego.svg?branch=master)](https://travis-ci.com/gtforge/newrelic_beego)
-
 NewRelic BeeGo
 ==============
 
