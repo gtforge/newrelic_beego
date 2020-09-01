@@ -1,11 +1,9 @@
 # Refer to https://golang.github.io/dep/docs/Gopkg.toml.html
 # for detailed Gopkg.toml documentation.
 
-# Beego's `1.10.x` release is broken again.
-# Using the fixed version from `develop` branch
 [[constraint]] 
   name = "github.com/astaxie/beego" 
-  revision = "7e0649d661fd9028e3217c645a88267de237befb"
+  version = "1.12.2"
 
 [[constraint]]
   name = "github.com/newrelic/go-agent"
