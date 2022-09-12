@@ -1,9 +1,9 @@
 # Refer to https://golang.github.io/dep/docs/Gopkg.toml.html
 # for detailed Gopkg.toml documentation.
 
-[[constraint]] 
-  name = "github.com/astaxie/beego" 
-  version = "1.12.2"
+[[override]]
+  name = "github.com/beego/beego"
+  version = "1.12.11"
 
 [[constraint]]
   name = "github.com/newrelic/go-agent"
