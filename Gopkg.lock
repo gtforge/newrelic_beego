@@ -2,8 +2,8 @@
 
 
 [[projects]]
-  digest = "1:dad0a826c7dfea5ca208ba915302b8bc8c46e31ce947ff4a28bc9cf6aa8c765a"
-  name = "github.com/astaxie/beego"
+  digest = "1:33547f547fa81a393bb3cccc4a145273a6e361662a90217b93ebc520c6dff64d"
+  name = "github.com/beego/beego"
   packages = [
     ".",
     "config",
@@ -16,8 +16,8 @@
     "utils",
   ]
   pruneopts = "UT"
-  revision = "8ef8fd26068a7b70865acbabee89f6691ae553a9"
-  version = "v1.12.2"
+  revision = "c280209bf5b94cf31094a200b166c97eb3898851"
+  version = "v1.12.11"
 
 [[projects]]
   digest = "1:d6afaeed1502aa28e80a4ed0981d570ad91b2579193404256ce672ed0a609e0d"
@@ -234,8 +234,8 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
-    "github.com/astaxie/beego",
-    "github.com/astaxie/beego/context",
+    "github.com/beego/beego",
+    "github.com/beego/beego/context",
     "github.com/newrelic/go-agent",
   ]
   solver-name = "gps-cdcl"
