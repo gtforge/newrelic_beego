@@ -8,13 +8,13 @@ import (
 
 	"github.com/beego/beego"
 	"github.com/beego/beego/context"
-	newrelic "github.com/newrelic/go-agent"
+	newrelicv3 "github.com/newrelic/go-agent/v3/newrelic"
 )
 
 var (
 	reNumberIDInPath = regexp.MustCompile("[0-9]{2,}")
 	reg              = regexp.MustCompile(`[a-zA-Z0-9_]+`)
-	NewrelicAgent    newrelic.Application
+	NewrelicAgent    *newrelicv3.Application
 )
 
 const newRelicSkipPaths = "newrelic_skip_paths"
@@ -44,14 +44,23 @@ func init() {
 		}
 	}
 
-	config := newrelic.NewConfig(appName, license)
-	config.CrossApplicationTracer.Enabled = false
-	app, err := newrelic.NewApplication(config)
+	app, err := newrelicv3.NewApplication(
+		newrelicv3.ConfigAppName(appName),
+		newrelicv3.ConfigLicense(license),
+		newrelicv3.ConfigInfoLogger(os.Stdout),
+		func(c *newrelicv3.Config) {
+			c.CrossApplicationTracer.Enabled = false
+			c.ErrorCollector.RecordPanics = true
+		},
+	)
+
 	if err != nil {
 		beego.Warn(err.Error())
 		return
 	}
+
 	NewrelicAgent = app
+
 	beego.InsertFilter("*", beego.BeforeRouter, StartTransaction, false)
 	beego.InsertFilter("*", beego.FinishRouter, EndTransaction, false)
 	beego.Info("NewRelic agent started")
@@ -81,8 +90,11 @@ func StartTransaction(ctx *context.Context) {
 		return
 	}
 
-	tx := NewrelicAgent.StartTransaction(ctx.Request.URL.Path, ctx.ResponseWriter.ResponseWriter, ctx.Request)
-	ctx.ResponseWriter.ResponseWriter = tx
+	tx := NewrelicAgent.StartTransaction(ctx.Request.URL.Path)
+
+	tx.SetWebRequestHTTP(ctx.Request)
+
+	ctx.ResponseWriter.ResponseWriter = tx.SetWebResponse(ctx.ResponseWriter.ResponseWriter)
 	ctx.Input.SetData(newRelicTransaction, tx)
 }
 
@@ -109,7 +121,7 @@ func NameTransaction(ctx *context.Context) {
 	if ctx.Input.GetData(newRelicTransaction) == nil {
 		return
 	}
-	tx := ctx.Input.GetData(newRelicTransaction).(newrelic.Transaction)
+	tx := ctx.Input.GetData(newRelicTransaction).(*newrelicv3.Transaction)
 	// in old beego pattern available only in dev mode
 	pattern, ok := ctx.Input.GetData("RouterPattern").(string)
 	if ok {
@@ -125,14 +137,14 @@ func NameTransaction(ctx *context.Context) {
 	}
 
 	txName := fmt.Sprintf("%s %s", ctx.Request.Method, path)
-	_ = tx.SetName(txName)
+	tx.SetName(txName)
 }
 
 func EndTransaction(ctx *context.Context) {
 	NameTransaction(ctx)
 	if ctx.Input.GetData(newRelicTransaction) != nil {
-		tx := ctx.Input.GetData(newRelicTransaction).(newrelic.Transaction)
-		_ = tx.End()
+		tx := ctx.Input.GetData(newRelicTransaction).(*newrelicv3.Transaction)
+		tx.End()
 	}
 }
 
