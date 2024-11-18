@@ -2,6 +2,7 @@ package newrelic_beego
 
 import (
 	"fmt"
+	"net/http"
 	"os"
 	"regexp"
 	"strings"
@@ -51,6 +52,41 @@ func init() {
 		func(c *newrelicv3.Config) {
 			c.CrossApplicationTracer.Enabled = false
 			c.ErrorCollector.RecordPanics = true
+
+			// Ignore all 4xx errors. By default NR records 4xx errors, see
+			// https://github.com/newrelic/go-agent/blob/82c8f8440ca84eb68e08248d877fa1d0b55da333/GUIDE.md?plain=1#L738
+			c.ErrorCollector.IgnoreStatusCodes = append(
+				c.ErrorCollector.IgnoreStatusCodes,
+				http.StatusBadRequest,
+				http.StatusUnauthorized,
+				http.StatusPaymentRequired,
+				http.StatusForbidden,
+				// http.StatusNotFound, // already in the list
+				http.StatusMethodNotAllowed,
+				http.StatusNotAcceptable,
+				http.StatusProxyAuthRequired,
+				http.StatusRequestTimeout,
+				http.StatusConflict,
+				http.StatusGone,
+				http.StatusLengthRequired,
+				http.StatusPreconditionFailed,
+				http.StatusRequestEntityTooLarge,
+				http.StatusRequestURITooLong,
+				http.StatusUnsupportedMediaType,
+				http.StatusRequestedRangeNotSatisfiable,
+				http.StatusExpectationFailed,
+				http.StatusTeapot,
+				http.StatusMisdirectedRequest,
+				http.StatusUnprocessableEntity,
+				http.StatusLocked,
+				http.StatusFailedDependency,
+				http.StatusTooEarly,
+				http.StatusUpgradeRequired,
+				http.StatusPreconditionRequired,
+				http.StatusTooManyRequests,
+				http.StatusRequestHeaderFieldsTooLarge,
+				http.StatusUnavailableForLegalReasons,
+			)
 		},
 	)
 
