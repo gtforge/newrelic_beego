@@ -3,7 +3,7 @@ module github.com/gtforge/newrelic_beego
 go 1.22.0
 
 require (
-	github.com/beego/beego v1.12.14
+	github.com/beego/beego v1.12.11
 	github.com/newrelic/go-agent v3.20.1+incompatible
 )
 
